@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Signup</title>
+    <link rel="stylesheet" href="style2.css">
+    <style>
+        #loginIcon {
+            display: flex;
+            align-items: center;
+        }
+
+        #usernameDisplay {
+            margin-left: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <div id="loginIcon">
+        <img src="login-icon.png" alt="Login Icon" width="50" height="50"> 
+        <span id="usernameDisplay"></span>
+       
+    </div> -->
+
+    <div class="login-container">
+        <h1>Login</h1>
+        <form id="login-form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <button type="submit">Login</button>
+        </form>
+        <h2>or</h2>
+        <h1>Sign Up</h1>
+        <form id="signup-form">
+            <label for="new-username">Username:</label>
+            <input type="text" id="new-username" name="new-username" required>
+            <label for="new-password">Password:</label>
+            <input type="password" id="new-password" name="new-password" required>
+            <button type="submit">Sign Up</button>
+        </form>
+    
+  <script>
+    document.getElementById('signup-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      fetch('http://localhost:5500/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password })
+      })
+      
+          .then(response => response.text())
+      .then(data => alert(data))
+     .catch(error => console.error('Error:', error));
+      // Store username in local storage
+      localStorage.setItem('username', username);
+
+// Display the username next to the login icon
+document.getElementById('usernameDisplay').textContent = username;
+
+
+     // Check if the username is already stored and display it
+     window.onload = function() {
+            const storedUsername = localStorage.getItem('username');
+            if (storedUsername) {
+                document.getElementById('usernameDisplay').textContent = storedUsername;
+            }
+        }
+    });
+
+
+
+    document.getElementById('login-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      fetch('http://localhost:5500/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password })
+      })
+
+    //   .then(response => response.text())
+    //   .then(data => alert(data))
+    //   .catch(error => console.error('Error:', error));
+    // });
+    .then(response => response.text())
+      .then(data => {
+        if (data === 'Login successful') {
+            window.location.href = `rough.html?username=${username}`;  // Redirect to the dashboard page
+        } else {
+          alert(data);
+        }
+      })
+      .catch(error => console.error('Error:', error));
+    });
+  </script>
+</body>
+</html>
